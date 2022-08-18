@@ -1,0 +1,21 @@
+#!/usr/bin/env bash
+
+for file in $(ls ref*)
+do
+        YEAR=$(echo $file | sed -nE "s/ref([0-9]{4}).*/\1/p")
+
+        N=1
+        while IFS= read -r line; do
+            if [ $N -eq 1 ]
+            then
+                N=0
+            else
+                printf '%s%s\n' "$(echo $line | sed 's/\r//')" ",$YEAR"
+            fi
+            
+        done < $file
+done > newAllRefInfo.csv
+
+#add headers
+#also need to remove "Officials," from every line in which that appears
+#what to do with Pick (no favorite)?
